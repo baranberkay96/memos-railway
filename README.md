@@ -1,5 +1,7 @@
 # Deploy and Host Memos with Railway
 
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/memos-2611-private-notes-and-microblog-p?referralCode=20H68q)
+
 Memos is a lightweight, open-source note-taking service: write short Markdown notes in a timeline, tag them, attach files, and keep them private or share them. This template runs Memos 26.11 on PostgreSQL 18 with an administrator account created on the first start and public sign-up switched off.
 
 ## About Hosting Memos
