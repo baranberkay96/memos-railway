@@ -40,12 +40,22 @@ Memos uses calendar versions since 26.10 (`26.11.2`).
 
 ## Resources
 
-See the round-13 report for measured values.
+Measured on Railway (2026-11-24, idle after sign-in, a memo and an attachment):
+
+| Service | Idle RAM | CPU idle |
+|---|---|---|
+| Memos | 0.08 GB | < 0.01 vCPU |
+| Postgres | 0.07 GB | < 0.01 |
+
+Total ≈ 0.15 GB → ≈ $1.5/month idle RAM plus the volume. Fits Trial and Free.
 
 ## Verification checklist
 
-- [ ] SUCCESS; `/healthz` 200; profile `needsSetup=false`.
-- [ ] Stranger sign-up refused; admin sign-in; memo create + filter; attachment stored.
+- [x] Both services SUCCESS, `/healthz` 200; log `applied configuration … changes="[create instance/settings/GENERAL create users/admin]"`; profile `needsSetup=false`.
+- [x] Stranger `POST /api/users` → 403 "user registration is not allowed".
+- [x] `admin` sign-in (role ADMIN); memo create; content filter finds it; attachment upload and download (local storage on the volume).
+- [x] Redeploy with `MEMOS_ADMIN_PASSWORD=abc`: SUCCESS, warning logged, `configuration unchanged`, old password still works, attachment still served.
+- [x] New 24-character password + `MEMOS_ADMIN_LOGIN_VERSION=2`: password re-applied (serial 2), login with the new password works.
 
 ## Open questions
 

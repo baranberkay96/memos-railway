@@ -50,7 +50,9 @@ The Memos service mounts a volume at `/var/opt/memos` for attachments.
 
 **Versions.** The image is pinned by digest in `services/memos/Dockerfile`. To upgrade, change the tag and digest, back up Postgres and redeploy; migrations run on start.
 
-**Resources.** About 0.1 GB RAM idle in total (Memos ~0.05 GB, Postgres ~0.05 GB), roughly $1–2 per month plus volume storage. Runs on the Trial plan.
+**Resources.** Measured idle on Railway: Memos 0.08 GB, Postgres 0.07 GB; about 0.15 GB in total, roughly $1.5 per month plus volume storage. Runs on the Trial and Free plans.
+
+**Public memos.** Memos' access mode on a new instance allows anonymous visitors to see memos you explicitly mark Public; new memos are private by default. Change it under Settings > System.
 
 **License.** Memos is MIT-licensed. This is a community template, not affiliated with the Memos project.
 
