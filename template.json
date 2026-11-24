@@ -1,0 +1,177 @@
+{
+  "name": "Memos 26.11 Private Notes and Microblog (Postgres)",
+  "idSeed": "Memos 26.11 Private Notes and Microblog (Postgres)",
+  "description": "Self-hosted note-taking and microblog; admin preset, sign-up closed.",
+  "category": "Other",
+  "tags": [
+    "memos",
+    "notes",
+    "microblog",
+    "markdown",
+    "knowledge-base",
+    "postgres",
+    "self-hosted"
+  ],
+  "image": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/memos.svg",
+  "upstream": {
+    "repo": "usememos/memos",
+    "version": "26.11.2",
+    "license": "MIT",
+    "images": {
+      "memos": "neosmemo/memos:26.11.2@sha256:3c7bd779510403350465ecabb7e6fbc0887206f9d55b8decf51a205613fa5616 (released 2026-11-22)",
+      "postgres": "ghcr.io/railwayapp-templates/postgres-ssl:18.6@sha256:4fc833b43d2aaf6ecc9b18615f5533602b723a32d0e2efe2dae8ca0f7217c863"
+    },
+    "checked": "2026-11-24"
+  },
+  "services": {
+    "Memos": {
+      "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/memos.svg",
+      "source": {
+        "repo": "baranberkay96/memos-railway",
+        "rootDirectory": "/services/memos"
+      },
+      "startCommand": null,
+      "preDeployCommand": null,
+      "healthcheckPath": "/healthz",
+      "healthcheckTimeout": 600,
+      "restartPolicyType": "ALWAYS",
+      "numReplicas": 1,
+      "cronSchedule": null,
+      "publicDomain": true,
+      "targetPort": 5230,
+      "tcpProxy": null,
+      "volume": {
+        "mountPath": "/var/opt/memos"
+      },
+      "variables": {
+        "PORT": {
+          "defaultValue": "5230",
+          "description": "Port Memos listens on.",
+          "required": false
+        },
+        "MEMOS_DRIVER": {
+          "defaultValue": "postgres",
+          "description": "Database driver.",
+          "required": false
+        },
+        "MEMOS_DSN": {
+          "defaultValue": "postgresql://${{Postgres.POSTGRES_USER}}:${{Postgres.POSTGRES_PASSWORD}}@${{Postgres.RAILWAY_PRIVATE_DOMAIN}}:5432/${{Postgres.POSTGRES_DB}}?sslmode=disable",
+          "description": "Postgres on the private network.",
+          "required": false
+        },
+        "MEMOS_INSTANCE_URL": {
+          "defaultValue": "https://${{RAILWAY_PUBLIC_DOMAIN}}",
+          "description": "Public URL of Memos. Change it when you add a custom domain.",
+          "required": false
+        },
+        "MEMOS_ADMIN_PASSWORD": {
+          "defaultValue": "${{secret(24, \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\")}}",
+          "description": "Password of the 'admin' account (12+ characters), applied on the first start.",
+          "required": false
+        },
+        "MEMOS_ADMIN_LOGIN_VERSION": {
+          "defaultValue": "1",
+          "description": "Raise by 1 and redeploy to re-apply MEMOS_ADMIN_PASSWORD (password reset).",
+          "required": false
+        },
+        "MEMOS_ALLOW_REGISTRATION": {
+          "defaultValue": "false",
+          "description": "true: anyone who opens the site can create an account. false: only the admin adds users.",
+          "required": false
+        },
+        "MEMOS_LOG_LEVEL": {
+          "defaultValue": "info",
+          "description": "Log level (debug, info, warn, error).",
+          "required": false
+        },
+        "RAILWAY_DEPLOYMENT_DRAINING_SECONDS": {
+          "defaultValue": "20",
+          "description": "Grace period for open requests on redeploy.",
+          "required": false
+        }
+      }
+    },
+    "Postgres": {
+      "icon": "https://devicons.railway.app/i/postgresql.svg",
+      "source": {
+        "image": "ghcr.io/railwayapp-templates/postgres-ssl:18.6@sha256:4fc833b43d2aaf6ecc9b18615f5533602b723a32d0e2efe2dae8ca0f7217c863"
+      },
+      "startCommand": null,
+      "preDeployCommand": null,
+      "healthcheckPath": null,
+      "healthcheckTimeout": null,
+      "restartPolicyType": "ON_FAILURE",
+      "restartPolicyMaxRetries": 10,
+      "numReplicas": 1,
+      "cronSchedule": null,
+      "publicDomain": false,
+      "targetPort": null,
+      "tcpProxy": null,
+      "volume": {
+        "mountPath": "/var/lib/postgresql/data"
+      },
+      "variables": {
+        "PGDATA": {
+          "defaultValue": "/var/lib/postgresql/data/pgdata",
+          "description": "Location where the database will be initialized",
+          "required": false
+        },
+        "PGHOST": {
+          "defaultValue": "${{RAILWAY_PRIVATE_DOMAIN}}",
+          "description": "Railway Private Domain Name.",
+          "required": false
+        },
+        "PGPORT": {
+          "defaultValue": "5432",
+          "description": "Port to connect to Postgres.",
+          "required": false
+        },
+        "PGUSER": {
+          "defaultValue": "${{ POSTGRES_USER }}",
+          "description": "Required variable for Data panel",
+          "required": false
+        },
+        "PGDATABASE": {
+          "defaultValue": "${{POSTGRES_DB}}",
+          "description": "Required variable for the data panel.",
+          "required": false
+        },
+        "PGPASSWORD": {
+          "defaultValue": "${{POSTGRES_PASSWORD}}",
+          "description": "Required variable for Data panel",
+          "required": false
+        },
+        "POSTGRES_DB": {
+          "defaultValue": "railway",
+          "description": "Default database created when image is started.",
+          "required": false
+        },
+        "DATABASE_URL": {
+          "defaultValue": "postgresql://${{PGUSER}}:${{POSTGRES_PASSWORD}}@${{RAILWAY_PRIVATE_DOMAIN}}:5432/${{PGDATABASE}}",
+          "description": "Private connection URL (Memos uses MEMOS_DSN).",
+          "required": false
+        },
+        "POSTGRES_USER": {
+          "defaultValue": "postgres",
+          "description": "User to connect to Postgres DB",
+          "required": false
+        },
+        "SSL_CERT_DAYS": {
+          "defaultValue": "820",
+          "description": "SSL certificate expiry in days.",
+          "required": false
+        },
+        "POSTGRES_PASSWORD": {
+          "defaultValue": "${{ secret(32, \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\") }}",
+          "description": "Password to connect to DB",
+          "required": false
+        },
+        "RAILWAY_DEPLOYMENT_DRAINING_SECONDS": {
+          "defaultValue": "60",
+          "description": "Allow Postgres to cleanly shut down",
+          "required": false
+        }
+      }
+    }
+  }
+}
